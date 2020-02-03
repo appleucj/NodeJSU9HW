@@ -1,0 +1,39 @@
+.picHD{
+    text-align: center;
+    background-color: cyan;
+    height: 50%;
+}
+.img{
+    height: auto;
+    width: 5rem;
+    border-radius: 1rem; 
+    background-color: darkorchid;
+}
+.PR,.FL{
+    background-color: rgb(250, 128, 114);
+    text-align: center;
+    margin: 2rem;
+    
+}
+
+#Hi{
+    color: rgb(255, 240, 243);
+    text-align: center;
+}
+#name{
+    color: rgb(255, 240, 243);
+    text-align: center;
+  
+}
+.avatar {
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  #I{
+      text-align: center;
+  }
+  #col{
+      margin: 0,auto;
+  }
