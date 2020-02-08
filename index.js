@@ -1,11 +1,11 @@
 // SSH
 // ucjsurface
-var client_id = "b2:11:18:03:71:a6:fd:da:a1:ac:07:af:0d:4a:04:a6"
-client_secret = 'https://api.github.com/users/whatever?client_id=xxxx&client_secret=yyyy'
+// var client_id = "3032bfb26cf38dbe3790"
+// client_secret = '7bb2a6e8e3ebe9c410bb2e723b01ccdb0ea7e01e'
 
-
+var http = require('http');
 var inquirer = require('inquirer');
-const electron = require('electron');
+//const electron = require('electron');
 const axios = require('axios');
 var fs = require('fs');
 var questions = [
@@ -28,21 +28,22 @@ inquirer
         axios.get(`https://api.github.com/users/${answers.username}`)
             .then(function (response) {
                 console.log(response.data);
-                fs.readFile("index.html", "utf8", function (err, data) {
-                    // console.log(data);
-                    data = data.replace("{{ name }}", response.data.name).replace("{{ public-repo }}", response.data.public_repos);
-
-                    fs.writeFile("test.html", data, function (err) {
-
-                    })
-                });
-
             })
-            .catch(function (error) {
-                console.log(error);
+        fs.readFile("index.html", "utf8", function (err, data) {
+            console.log(data);
+            // data = data.replace("{{ name }}", response.data.name).replace("{{ public-repo }}", response.data.public_repos);
+
+            res.writeFile("text.html", data, function (err,data) {
+                data = data.replace("{{ name }}")
             })
+        });
 
     })
+    .catch(function (error) {
+        console.log(error);
+    })
+$(".FL").on("click", function)
+
 
 // This is you read files
 // fs.readFile(this is the file you want to read, text encoding (utf8), callbackfunction(error, content of the file you're reading))
