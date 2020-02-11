@@ -19,6 +19,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "electron": "^8.0.0",
+    "html-pdf": "^2.2.0",
     "inquire": "^0.4.8",
     "inquirer": "^7.0.4"
   }
