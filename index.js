@@ -1,66 +1,69 @@
-// SSH
-// ucjsurface
-// var client_id = "3032bfb26cf38dbe3790"
-// client_secret = '7bb2a6e8e3ebe9c410bb2e723b01ccdb0ea7e01e'
-var pdf = require('html-pdf');
-var http = require('http');
-var inquirer = require('inquirer');
-const electron = require('electron');
-const axios = require('axios');
-var fs = require('fs');
-var questions = [
-    {
-        type: "input",
-        name: "username",
-        message: "what is your github username"
-    },
-    {
-        type: "input",
-        name: "color",
-        message: "what is your fav color"
-    }]
+const fs = require("fs");
+const path = require("path");
+const inquirer = require("inquirer");
+const api = require("./utils/api");
+const generateMarkdown = require("./utils/generateMarkdown");
 
-inquirer
-    .prompt(questions)
-    .then(answers => {
-        // console.log(answers);
-        // answers.username;
-        axios.get(`https://api.github.com/users/${answers.username}`)
-            .then(function (response) {
-                console.log(response.data);
-                fs.readFile("index.html", "utf8", function (err, data) {
-                    //console.log(data);
-                    //    data = data.replace("{{ name }}", response.data.name).replace("{{ public-repo }}", response.data.public_repos);
-                    let html = data.replace("{{ name }}", response.data.name).replace("{{ public-repos }}", response.data.public_repos).replace("{{ followers }}", response.data.followers).replace("{{ image }}", response.data.avatar_url).replace("{{ following }}", response.data.following).replace("{{ stars }}", response.data.starred_url)
-                    //console.log(name);
-                    fs.writeFile("text.html", html, function (err) {
-                        if (err) {
-                            console.log(err);
+const questions = [
+  {
+    type: "input",
+    name: "github",
+    message: "What is your GitHub username?"
+  },
+  {
+    type: "input",
+    name: "title",
+    message: "What is your project's name?"
+  },
+  {
+    type: "input",
+    name: "description",
+    message: "Please write a short description of your project"
+  },
+  {
+    type: "list",
+    name: "license",
+    message: "What kind of license should your project have?",
+    choices: ["MIT", "APACHE 2.0", "GPL 3.0", "BSD 3", "None"]
+  },
+  {
+    type: "input",
+    name: "installation",
+    message: "What command should be run to install dependencies?",
+    default: "npm i"
+  },
+  {
+    type: "input",
+    name: "test",
+    message: "What command should be run to run tests?",
+    default: "npm test"
+  },
+  {
+    type: "input",
+    name: "usage",
+    message: "What does the user need to know about using the repo?",
+  },
+  {
+    type: "input",
+    name: "contributing",
+    message: "What does the user need to know about contributing to the repo?",
+  }
+];
 
-                        }
-                        pdf.create(html).toFile("./text.pdf", function (err, res) {
-                            console.log(res.filename);
-                        });
-                        // data = data.replace("{{ name }}")
-                    })
+function writeToFile(fileName, data) {
+  return fs.writeFileSync(path.join(process.cwd(), fileName), data);
+}
 
-                });
-            })
+function init() {
+  inquirer.prompt(questions).then((inquirerResponses) => {
+    console.log("Searching...");
 
+    api
+      .getUser(inquirerResponses.github)
+      .then(({ data }) => {
+        writeToFile("README.md", generateMarkdown({ ...inquirerResponses, ...data }));
+      })
+  })
+}
 
-    })
-    .catch(function (error) {
-        // console.log(error);
-    })
-// $(".FL").on("click", function)
-
-
-// This is you read files
-// fs.readFile(this is the file you want to read, text encoding (utf8), callbackfunction(error, content of the file you're reading))
-// fs.readFile("index.html", "utf8", function (err, data) {
-//     console.log(data);
-
-//     fs.writeFile("test.pdf", data, function (err) {
-
-//     })
-// });
+init();
